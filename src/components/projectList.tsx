@@ -21,7 +21,7 @@ export default function ProjectList() {
     }
   }, [workspaceData]);
 
-  const { isLoading, data, pagination } = useFetch(
+  const { isLoading, data, pagination, error } = useFetch(
     (options) => {
       const page = options.page + 1;
       const pageSize = 25;
@@ -35,26 +35,38 @@ export default function ProjectList() {
       if (workspace && workspace !== "0") {
         params.append("workspaces", workspace);
       }
-
       return `${appURL}/api/projects?${params.toString()}`;
     },
     {
       headers: { Authorization: `Token ${apiToken}` },
+      parseResponse: async (response: Response) => {
+        if (!response.ok) {
+          return {
+            results: [],
+            next: null,
+          };
+        }
+        return response.json();
+      },
       initialData: {
         data: [],
         hasMore: false,
-        pageSize: 25,
+        pageSize: 50,
       },
       keepPreviousData: true,
       mapResult(result: ProjectApiResponse) {
         return {
-          data: result.results || [],
+          data: result?.results || [],
           hasMore: result.next != null,
           pageSize: 25,
         };
       },
     },
   );
+
+  if (error) {
+    <List.EmptyView title="There's an issue loading projects." />;
+  }
 
   function resetDetailView() {
     isDetailLoading && setIsDetailLoading(false);
