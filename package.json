@@ -1,0 +1,67 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "labelstudio",
+  "title": "Label Studio Project Managment",
+  "description": "The Label Studio Project Viewer is a Raycast extension designed to seamlessly integrate with Label Studio, enabling users to quickly access and manage their labeling projects directly from their desktop.",
+  "icon": "label-studio-icon-512.png",
+  "author": "luarmr",
+  "categories": [
+    "Web"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "projects",
+      "title": "Label Studio Projects",
+      "description": "List all the projects and provide access to them.",
+      "mode": "view"
+    },
+    {
+      "name": "openLabelStudio",
+      "title": "LabelStudio App",
+      "description": "Open LabelStudio in your browser.",
+      "mode": "no-view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.72.1",
+    "@raycast/utils": "^1.15.0",
+    "date-fns": "^3.6.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.6",
+    "@types/node": "20.8.10",
+    "@types/react": "18.2.27",
+    "eslint": "^8.51.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "npx @raycast/api@latest publish"
+  },
+  "preferences": [
+    {
+      "name": "appURL",
+      "type": "textfield",
+      "key": "instanceUrl",
+      "title": "Url",
+      "description": "Label Studio Instance URL",
+      "placeholder": "https://your-instance.labelstudio.io",
+      "required": true
+    },
+    {
+      "name": "apiToken",
+      "type": "password",
+      "key": "apiToken",
+      "title": "API Token",
+      "description": "Label Studio API Token",
+      "placeholder": "Enter your API token here",
+      "required": true
+    }
+  ]
+}
