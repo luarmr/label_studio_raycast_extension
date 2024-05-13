@@ -1,17 +1,14 @@
 import { getPreferenceValues, open, showHUD } from "@raycast/api";
-
-interface Preferences {
-  url: string;
-}
+import { Preferences } from "./types";
 
 export default async function Command() {
   try {
     const preferences = getPreferenceValues<Preferences>();
-    const { url } = preferences;
+    const { appURL } = preferences;
 
-    if (url) {
-      await open(url);
-      await showHUD(`Opening: ${url}`);
+    if (appURL) {
+      await open(appURL);
+      await showHUD(`Opening: ${appURL}`);
     } else {
       await showHUD("No URL configured.");
     }
