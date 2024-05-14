@@ -18,21 +18,6 @@ export interface Workspace {
   title: string;
 }
 
-export interface ProjectListItemProps {
-  project: Project;
-  isDetailLoading: boolean;
-  setIsDetailLoading: (isDetailLoading: boolean) => void;
-}
-
-export interface ProjectApiResponse {
-  results: Project[];
-  next: string | null;
-}
-
-export interface VersionApiResponse {
-  "label-studio-enterprise-backend"?: boolean;
-}
-
 export interface User {
   id: number;
   active_organization: number;
@@ -79,6 +64,17 @@ export interface Project {
 
 export interface ProjectApiResponse {
   results: Project[];
+  next: string | null;
+}
+
+export interface VersionApiResponse {
+  "label-studio-enterprise-backend"?: boolean;
+}
+
+export interface ProjectListItemProps {
+  project: Project;
+  isDetailLoading: boolean;
+  setIsDetailLoading: (isDetailLoading: boolean) => void;
 }
 
 export interface ProjectDetailProps {
