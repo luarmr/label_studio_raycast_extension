@@ -30,38 +30,47 @@ const ProjectDetail = ({ projectId }: ProjectDetailProps) => {
     return <List.Item.Detail markdown="No project details available." />;
   }
 
-  const colorBox = `<img src="https://via.placeholder.com/200x5/${project.color.replace("#", "")}/000000?text=+" alt="color" />`;
-  const name =
-    project.created_by.first_name || project.created_by.last_name
-      ? `${project.created_by.first_name} ${project.created_by.last_name}`
-      : `No Name`;
-  const detailContent = `
-## ${project.title}
-${project.description}
-
-
-| Field                        | Details                                   |
-|------------------------------|-------------------------------------------|
-| **Created By**               | ${name} |
-| **Published**                | ${project.is_published ? "Yes" : "No"} |
-| **Created At**               | ${formatDistanceToNow(parseISO(project.created_at))} ago |
-| **Pinned**                   | ${project.pinned_at ? "Yes" : "No"} |
-| **Draft**                    | ${project.is_draft ? "Yes" : "No"} |
-| **Total Tasks**              | ${project.task_number}             |
-| **Tasks with Annotations**   | ${project.num_tasks_with_annotations} |
-| **Finished Task Number**     | ${project.finished_task_number}    |
-| **Total Annotations**        | ${project.total_annotations_number} |
-| **Skipped Annotations**      | ${project.skipped_annotations_number} |
-| **Maximum Annotations**      | ${project.maximum_annotations}     |
-| **Useful Annotation Number** | ${project.useful_annotation_number} |
-| **Ground Truth Number**      | ${project.ground_truth_number}     |
-| **Total Predictions**        | ${project.total_predictions_number} |
-| **Overlap Cohort %**         | ${project.overlap_cohort_percentage}% |
-
-${colorBox}
-`;
-
-  return <List.Item.Detail markdown={detailContent} />;
+  return (
+    <List.Item.Detail
+      markdown={`## ${project.title}\n${project.description || "No description available."}`}
+      metadata={
+        <List.Item.Detail.Metadata>
+          <List.Item.Detail.Metadata.Label
+            title="Created By"
+            text={
+              project.created_by.first_name || project.created_by.last_name
+                ? `${project.created_by.first_name} ${project.created_by.last_name}`
+                : "No Name"
+            }
+          />
+          <List.Item.Detail.Metadata.Label title="Published" text={project.is_published ? "Yes" : "No"} />
+          <List.Item.Detail.Metadata.Label
+            title="Created At"
+            text={`${formatDistanceToNow(parseISO(project.created_at))} ago`}
+          />
+          <List.Item.Detail.Metadata.Label title="Pinned" text={project.pinned_at ? "Yes" : "No"} />
+          <List.Item.Detail.Metadata.Label title="Draft" text={project.is_draft ? "Yes" : "No"} />
+          <List.Item.Detail.Metadata.Separator />
+          <List.Item.Detail.Metadata.Label title="Total Tasks" text={`${project.task_number}`} />
+          <List.Item.Detail.Metadata.Label
+            title="Tasks with Annotations"
+            text={`${project.num_tasks_with_annotations}`}
+          />
+          <List.Item.Detail.Metadata.Label title="Finished Task Number" text={`${project.finished_task_number}`} />
+          <List.Item.Detail.Metadata.Label title="Total Annotations" text={`${project.total_annotations_number}`} />
+          <List.Item.Detail.Metadata.Label title="Skipped Annotations" text={`${project.skipped_annotations_number}`} />
+          <List.Item.Detail.Metadata.Label title="Maximum Annotations" text={`${project.maximum_annotations}`} />
+          <List.Item.Detail.Metadata.Label
+            title="Useful Annotation Number"
+            text={`${project.useful_annotation_number}`}
+          />
+          <List.Item.Detail.Metadata.Label title="Ground Truth Number" text={`${project.ground_truth_number}`} />
+          <List.Item.Detail.Metadata.Label title="Total Predictions" text={`${project.total_predictions_number}`} />
+          <List.Item.Detail.Metadata.Label title="Overlap Cohort %" text={`${project.overlap_cohort_percentage}%`} />
+        </List.Item.Detail.Metadata>
+      }
+    />
+  );
 };
 
 export default ProjectDetail;

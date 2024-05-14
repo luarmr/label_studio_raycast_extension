@@ -1,9 +1,9 @@
-import { List } from "@raycast/api";
+import { List, showToast, Toast } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ProjectApiResponse, Workspace } from "../types";
 import { useAPIAccess } from "../context/APIAccessContext";
-import ProjectListItem from "../components/projectListItem";
+import ProjectListItem from "./projectListItem";
 
 export default function ProjectList() {
   const { apiToken, appURL } = useAPIAccess();
@@ -64,13 +64,15 @@ export default function ProjectList() {
     },
   );
 
-  if (error) {
-    <List.EmptyView title="There's an issue loading projects." />;
-  }
+  useEffect(() => {
+    if (error) {
+      showToast(Toast.Style.Failure, "There's an issue loading projects.", error.message);
+    }
+  }, [error]);
 
-  function resetDetailView() {
-    isDetailLoading && setIsDetailLoading(false);
-  }
+  const resetDetailView = useCallback(() => {
+    setIsDetailLoading(false);
+  }, []);
 
   return (
     <List
@@ -85,7 +87,7 @@ export default function ProjectList() {
           ))}
         </List.Dropdown>
       }
-      onSelectionChange={() => resetDetailView()}
+      onSelectionChange={resetDetailView}
       isShowingDetail={isDetailLoading}
     >
       {data && data.length > 0 ? (

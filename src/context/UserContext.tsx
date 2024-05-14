@@ -13,12 +13,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { apiToken, appURL } = useAPIAccess();
 
   useEffect(() => {
-    setIsRestrictedUser(
-      !user?.org_membership
-        .filter((m) => m.organization_id === user.active_organization)
-        .filter((m) => m.active)
-        .some((m) => m.role !== "AN" && m.role !== "RE"),
-    );
+    if (user) {
+      setIsRestrictedUser(
+        !user.org_membership
+          .filter((m) => m.organization_id === user.active_organization)
+          .filter((m) => m.active)
+          .some((m) => m.role !== "AN" && m.role !== "RE"),
+      );
+    }
   }, [user, isEnterprise]);
 
   const fetchUserInfo = async () => {

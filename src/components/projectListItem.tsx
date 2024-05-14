@@ -23,6 +23,10 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
     }
   };
 
+  const toggleDetailView = () => {
+    setIsDetailLoading(!isDetailLoading);
+  };
+
   return (
     <List.Item
       key={project.id}
@@ -30,18 +34,11 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
       title={project.title}
       subtitle={`Created ${formatDistanceToNow(parseISO(project.created_at))} ago`}
       accessories={accessories}
-      detail={isDetailLoading && <ProjectDetail projectId={project.id} />}
+      detail={isDetailLoading ? <ProjectDetail projectId={project.id} /> : undefined}
       actions={
         <ActionPanel>
           <Action title="Open Data Page" icon={Icon.AppWindow} onAction={handleOpenDataPage} />
-          <Action
-            title="Togle View Details"
-            icon={Icon.Info}
-            onAction={() => {
-              setIsDetailLoading(!isDetailLoading);
-            }}
-          />
-
+          <Action title="Toggle View Details" icon={Icon.Info} onAction={toggleDetailView} />
           {isEnterprise && !isRestrictedUser && (
             <>
               <Action.OpenInBrowser
