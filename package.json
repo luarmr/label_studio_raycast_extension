@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "labelstudio",
-  "title": "Label Studio Project Managment",
+  "title": "Label Studio",
   "description": "The Label Studio Project Viewer is a Raycast extension designed to seamlessly integrate with Label Studio, enabling users to quickly access and manage their labeling projects directly from their desktop.",
   "icon": "label-studio-icon-512.png",
   "author": "luarmr",
@@ -12,13 +12,13 @@
   "commands": [
     {
       "name": "projects",
-      "title": "Label Studio Projects",
+      "title": "Projects",
       "description": "List all the projects and provide access to them.",
       "mode": "view"
     },
     {
       "name": "openLabelStudio",
-      "title": "LabelStudio App",
+      "title": "Open App",
       "description": "Open LabelStudio in your browser.",
       "mode": "no-view"
     }
