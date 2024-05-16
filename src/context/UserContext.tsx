@@ -13,14 +13,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { apiToken, appURL } = useAPIAccess();
 
   useEffect(() => {
-    if (user) {
-      setIsRestrictedUser(
-        !user.org_membership
-          .filter((m) => m.organization_id === user.active_organization)
-          .filter((m) => m.active)
-          .some((m) => m.role !== "AN" && m.role !== "RE"),
-      );
+    if (!user) {
+      return;
     }
+
+    if (!isEnterprise) {
+      // No roles in the open source version
+      setIsRestrictedUser(false);
+      return;
+    }
+
+    const isRestricted = user.org_membership?.some(
+      (m) => m.organization_id === user.active_organization && m.active && m.role !== "AN" && m.role !== "RE",
+    );
+
+    setIsRestrictedUser(!isRestricted);
   }, [user, isEnterprise]);
 
   const fetchUserInfo = async () => {

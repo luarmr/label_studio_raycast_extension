@@ -1,5 +1,4 @@
 import { Action, ActionPanel, Color, Icon, List, open, showToast, Toast } from "@raycast/api";
-import { formatDistanceToNow, parseISO } from "date-fns";
 import { ProjectListItemProps } from "../types";
 import { useAPIAccess } from "../context/APIAccessContext";
 import { useUser } from "../context/UserContext";
@@ -13,14 +12,16 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
 
   if (!project.is_published) accessories.push({ tag: { value: "Unpublished", color: Color.Blue } });
   if (project.is_draft) accessories.push({ tag: { value: "Draft", color: Color.Red } });
-  accessories.push({ icon: { source: "rectangle.svg", tintColor: project.color } });
+  // accessories.push({ icon: { source: "rectangle.svg", tintColor: project.color } });
 
   const handleOpenDataPage = () => {
-    if (project.is_published || !isEnterprise || !isRestrictedUser) {
-      open(urlProjectBase);
-    } else {
+    if (!project.is_published && isRestrictedUser) {
       showToast(Toast.Style.Failure, "This project needs to be published for you to access.");
+      return;
     }
+
+    const url = isRestrictedUser ? urlProjectBase : `${urlProjectBase}/data`;
+    open(url);
   };
 
   const toggleDetailView = () => {
@@ -30,9 +31,9 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
   return (
     <List.Item
       key={project.id}
-      icon={project.pinned_at ? { source: "thumbtack.svg", tintColor: Color.PrimaryText } : undefined}
+      icon={project.pinned_at ? { source: "thumbtack.svg", tintColor: project.color } : undefined}
       title={project.title}
-      subtitle={`Created ${formatDistanceToNow(parseISO(project.created_at))} ago`}
+      subtitle={project.workspaceName}
       accessories={accessories}
       detail={isDetailLoading ? <ProjectDetail projectId={project.id} /> : undefined}
       actions={

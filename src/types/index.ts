@@ -45,6 +45,18 @@ export interface Project {
   title: string;
   description: string;
   color: string;
+  is_published: boolean;
+  is_draft: boolean;
+  created_at: string;
+  pinned_at?: Date;
+  workspaceName?: string;
+  workspace: number;
+}
+
+export interface ProjectDetail {
+  title: string;
+  description: string;
+  color: string;
   maximum_annotations: number;
   is_published: boolean;
   is_draft: boolean;
@@ -60,10 +72,16 @@ export interface Project {
   total_predictions_number: number;
   overlap_cohort_percentage: number;
   finished_task_number: number;
+  workspaceName: string;
 }
 
 export interface ProjectApiResponse {
   results: Project[];
+  next: string | null;
+}
+
+export interface ProjectDetailApiResponse {
+  results: ProjectDetail[];
   next: string | null;
 }
 

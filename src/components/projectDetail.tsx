@@ -3,11 +3,11 @@ import { useFetch } from "@raycast/utils";
 import { useEffect } from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { useAPIAccess } from "../context/APIAccessContext";
-import { ProjectApiResponse, ProjectDetailProps } from "../types";
+import { ProjectDetailApiResponse, ProjectDetailProps } from "../types";
 
 const ProjectDetail = ({ projectId }: ProjectDetailProps) => {
   const { apiToken, appURL } = useAPIAccess();
-  const { data, isLoading, error } = useFetch<ProjectApiResponse>(
+  const { data, isLoading, error } = useFetch<ProjectDetailApiResponse>(
     `${appURL}/api/projects?ids=${projectId}&include=id%2Ctitle%2Cdescription%2Ccolor%2Cmaximum_annotations%2Cis_published%2Cis_draft%2Ccreated_by%2Ccreated_at%2Cpinned_at%2Cnum_tasks_with_annotations%2Ctask_number%2Cuseful_annotation_number%2Cground_truth_number%2Cskipped_annotations_number%2Ctotal_annotations_number%2Ctotal_predictions_number%2Coverlap_cohort_percentage%2Cfinished_task_number`,
     {
       headers: { Authorization: `Token ${apiToken}` },
