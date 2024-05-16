@@ -38,8 +38,8 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
       detail={isDetailLoading ? <ProjectDetail projectId={project.id} /> : undefined}
       actions={
         <ActionPanel>
-          <Action title="DataManager" icon={"data-manager.svg"} onAction={handleOpenDataPage} />
-          <Action title="Toggle View Details" icon={Icon.Info} onAction={toggleDetailView} />
+          <Action title="Data Manager" icon={"data-manager.svg"} onAction={handleOpenDataPage} />
+          <Action title="Toggle Details Panel" icon={"side-panel.svg"} onAction={toggleDetailView} />
           {isEnterprise && !isRestrictedUser && (
             <>
               <Action.OpenInBrowser
