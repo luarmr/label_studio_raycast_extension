@@ -31,31 +31,31 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
   return (
     <List.Item
       key={project.id}
-      icon={project.pinned_at ? { source: "thumbtack.svg", tintColor: project.color } : undefined}
+      icon={{ source: project.pinned_at ? "project-pinned.svg" : "project.svg", tintColor: project.color }}
       title={project.title}
       subtitle={project.workspaceName}
       accessories={accessories}
       detail={isDetailLoading ? <ProjectDetail projectId={project.id} /> : undefined}
       actions={
         <ActionPanel>
-          <Action title="Open Data Page" icon={Icon.AppWindow} onAction={handleOpenDataPage} />
-          <Action title="Toggle View Details" icon={Icon.Info} onAction={toggleDetailView} />
+          <Action title="Data Manager" icon={"data-manager.svg"} onAction={handleOpenDataPage} />
+          <Action title="Toggle Details Panel" icon={"side-panel.svg"} onAction={toggleDetailView} />
           {isEnterprise && !isRestrictedUser && (
             <>
               <Action.OpenInBrowser
-                title="Open Project Dashboard"
-                icon={Icon.Gauge}
+                title="Dashboard"
+                icon={"dashboard.svg"}
                 url={`${appURL}/projects/${project.id}/dashboard`}
               />
               <Action.OpenInBrowser
-                title="Open Project Members"
-                icon={Icon.Person}
+                title="Members"
+                icon={"members.svg"}
                 url={`${appURL}/projects/${project.id}/members`}
               />
             </>
           )}
           {!isRestrictedUser && (
-            <Action.OpenInBrowser title="Open Project Settings" icon={Icon.Gear} url={`${urlProjectBase}/settings`} />
+            <Action.OpenInBrowser title="Settings" icon={"settings.svg"} url={`${urlProjectBase}/settings`} />
           )}
           <Action.CopyToClipboard
             title="Copy Project JSON"
