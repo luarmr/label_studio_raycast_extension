@@ -56,7 +56,7 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
           urls[project.created_by.id] = await fetchAvatarUrl(project.created_by.avatar, apiToken);
         }
 
-        for (const member of project.members) {
+        for (const member of project.members || []) {
           if (member.user.avatar) {
             urls[member.user.id] = await fetchAvatarUrl(member.user.avatar, apiToken);
           }
@@ -77,6 +77,7 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
   if (!project) {
     return <Detail markdown="No project details available." />;
   }
+  const members = project.members || [];
 
   const createdByIcon = avatarUrls[project.created_by.id] || createInitialsIcon(project.created_by);
 
@@ -134,7 +135,7 @@ ${project.description || "No description available."}
           <Detail.Metadata.Label title="Created By" text={createdByText} icon={createdByIcon} />
           <Detail.Metadata.Label title="Created At" text={formatDate(project.created_at)} />
           <Detail.Metadata.Separator />
-          {project.members.map((member, index) => {
+          {members.map((member, index) => {
             const memberIcon = avatarUrls[member.user.id] || createInitialsIcon(member.user);
             return (
               <Detail.Metadata.Label
@@ -149,7 +150,7 @@ ${project.description || "No description available."}
               />
             );
           })}
-          {project.members?.length ? <Detail.Metadata.Separator /> : null}
+          {members?.length ? <Detail.Metadata.Separator /> : null}
           <Detail.Metadata.Label title="Project Color" text={project.color} icon={createColorIcon(project.color)} />
         </Detail.Metadata>
       }

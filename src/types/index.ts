@@ -75,7 +75,7 @@ export interface ProjectDetail {
   total_predictions_number: number;
   finished_task_number: number;
   workspaceName: string;
-  members: Member[];
+  members?: Member[];
   ready: boolean;
 }
 
