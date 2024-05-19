@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActionPanel, Color, Detail, showToast, Toast } from "@raycast/api";
+import { ActionPanel, Color, Detail, Image, showToast, Toast } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
 import getAPIAccess from "../utils/apiAccess";
 import { ProjectDetailApiResponse, ProjectDetailProps } from "../types";
@@ -132,7 +132,11 @@ ${project.description || "No description available."}
             />
           </Detail.Metadata.TagList>
           <Detail.Metadata.Separator />
-          <Detail.Metadata.Label title="Created By" text={createdByText} icon={createdByIcon} />
+          <Detail.Metadata.Label
+            title="Created By"
+            text={createdByText}
+            icon={{ source: createdByIcon, mask: Image.Mask.Circle }}
+          />
           <Detail.Metadata.Label title="Created At" text={formatDate(project.created_at)} />
           <Detail.Metadata.Separator />
           {members.map((member, index) => {
@@ -146,7 +150,7 @@ ${project.description || "No description available."}
                     ? `${member.user.first_name} ${member.user.last_name}`
                     : member.user.email
                 }
-                icon={memberIcon}
+                icon={{ source: memberIcon, mask: Image.Mask.Circle }}
               />
             );
           })}
