@@ -1,10 +1,9 @@
-import { getPreferenceValues, open, showHUD } from "@raycast/api";
-import { Preferences } from "./types";
+import { open, showHUD } from "@raycast/api";
+import getAPIAccess from "./utils/apiAccess";
 
 export default async function Command() {
   try {
-    const preferences = getPreferenceValues<Preferences>();
-    const { appURL } = preferences;
+    const { appURL } = getAPIAccess();
 
     if (appURL) {
       await open(appURL);

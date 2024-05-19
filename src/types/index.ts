@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export interface Preferences {
   appURL: string;
   apiToken: string;
@@ -35,10 +37,12 @@ export interface UserContextType {
   isRestrictedUser: boolean;
 }
 
-interface UserDetails {
+export interface UserDetails {
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
+  avatar: string | null;
 }
 
 export interface Project {
@@ -57,7 +61,6 @@ export interface ProjectDetail {
   title: string;
   description: string;
   color: string;
-  maximum_annotations: number;
   is_published: boolean;
   is_draft: boolean;
   created_by: UserDetails;
@@ -70,9 +73,14 @@ export interface ProjectDetail {
   skipped_annotations_number: number;
   total_annotations_number: number;
   total_predictions_number: number;
-  overlap_cohort_percentage: number;
   finished_task_number: number;
   workspaceName: string;
+  members?: Member[];
+  ready: boolean;
+}
+
+interface Member {
+  user: UserDetails;
 }
 
 export interface ProjectApiResponse {
@@ -91,10 +99,15 @@ export interface VersionApiResponse {
 
 export interface ProjectListItemProps {
   project: Project;
-  isDetailLoading: boolean;
-  setIsDetailLoading: (isDetailLoading: boolean) => void;
 }
 
 export interface ProjectDetailProps {
   projectId: string;
+  projectActions: ReactElement;
+}
+
+export interface ProjectActionsProps {
+  project: Project;
+  isRestrictedUser: boolean;
+  isEnterprise: boolean;
 }

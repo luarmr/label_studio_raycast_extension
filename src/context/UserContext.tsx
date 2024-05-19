@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { showToast, Toast } from "@raycast/api";
 import fetch from "node-fetch";
 import { User, VersionApiResponse, UserContextType } from "../types";
-import { useAPIAccess } from "./APIAccessContext";
+import getAPIAccess from "../utils/apiAccess";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -10,7 +10,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isRestrictedUser, setIsRestrictedUser] = useState(false);
   const [isEnterprise, setIsEnterprise] = useState(false);
-  const { apiToken, appURL } = useAPIAccess();
+  const { apiToken, appURL } = getAPIAccess();
 
   useEffect(() => {
     if (!user) {
