@@ -1,32 +1,20 @@
-import { Action, ActionPanel, Color, Icon, List, open, showToast, Toast } from "@raycast/api";
+import React from "react";
+import { List, Color, Action, ActionPanel } from "@raycast/api";
 import { ProjectListItemProps } from "../types";
-import { useAPIAccess } from "../context/APIAccessContext";
-import { useUser } from "../context/UserContext";
+import ProjectActions from "./projectActions";
 import ProjectDetail from "./projectDetail";
+import { useUser } from "../context/UserContext";
 
-export default function ProjectListItem({ project, isDetailLoading, setIsDetailLoading }: ProjectListItemProps) {
-  const { appURL } = useAPIAccess();
+export default function ProjectListItem({ project }: ProjectListItemProps) {
   const { isEnterprise, isRestrictedUser } = useUser();
   const accessories: List.Item.Accessory[] = [];
-  const urlProjectBase = `${appURL}/projects/${project.id}`;
 
   if (!project.is_published) accessories.push({ tag: { value: "Unpublished", color: Color.Blue } });
   if (project.is_draft) accessories.push({ tag: { value: "Draft", color: Color.Red } });
-  // accessories.push({ icon: { source: "rectangle.svg", tintColor: project.color } });
 
-  const handleOpenDataPage = () => {
-    if (!project.is_published && isRestrictedUser) {
-      showToast(Toast.Style.Failure, "This project needs to be published for you to access.");
-      return;
-    }
-
-    const url = isRestrictedUser ? urlProjectBase : `${urlProjectBase}/data`;
-    open(url);
-  };
-
-  const toggleDetailView = () => {
-    setIsDetailLoading(!isDetailLoading);
-  };
+  const projectActions = (
+    <ProjectActions project={project} isRestrictedUser={isRestrictedUser} isEnterprise={isEnterprise} />
+  );
 
   return (
     <List.Item
@@ -35,33 +23,14 @@ export default function ProjectListItem({ project, isDetailLoading, setIsDetailL
       title={project.title}
       subtitle={project.workspaceName}
       accessories={accessories}
-      detail={isDetailLoading ? <ProjectDetail projectId={project.id} /> : undefined}
       actions={
         <ActionPanel>
-          <Action title="Data Manager" icon={"data-manager.svg"} onAction={handleOpenDataPage} />
-          <Action title="Toggle Details Panel" icon={"side-panel.svg"} onAction={toggleDetailView} />
-          {isEnterprise && !isRestrictedUser && (
-            <>
-              <Action.OpenInBrowser
-                title="Dashboard"
-                icon={"dashboard.svg"}
-                url={`${appURL}/projects/${project.id}/dashboard`}
-              />
-              <Action.OpenInBrowser
-                title="Members"
-                icon={"members.svg"}
-                url={`${appURL}/projects/${project.id}/members`}
-              />
-            </>
-          )}
-          {!isRestrictedUser && (
-            <Action.OpenInBrowser title="Settings" icon={"settings.svg"} url={`${urlProjectBase}/settings`} />
-          )}
-          <Action.CopyToClipboard
-            title="Copy Project JSON"
-            icon={Icon.Clipboard}
-            content={JSON.stringify(project, null, 2)}
+          <Action.Push
+            title="Details Panel"
+            icon={"side-panel.svg"}
+            target={<ProjectDetail projectId={project.id} projectActions={projectActions} />}
           />
+          {projectActions}
         </ActionPanel>
       }
     />

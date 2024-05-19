@@ -1,13 +1,12 @@
 import { List, showToast, Toast } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ProjectApiResponse, Workspace, Project } from "../types";
-import { useAPIAccess } from "../context/APIAccessContext";
+import getAPIAccess from "../utils/apiAccess";
 import ProjectListItem from "./projectListItem";
 
 export default function ProjectList() {
-  const { apiToken, appURL } = useAPIAccess();
-  const [isDetailLoading, setIsDetailLoading] = useState<boolean>(false);
+  const { apiToken, appURL } = getAPIAccess();
   const [searchText, setSearchText] = useState<string>("");
   const [workspace, setWorkspace] = useState<string>("");
   const [workspaces, setWorkspaces] = useState<Workspace[]>([{ id: 0, title: "All Projects" }]);
@@ -77,10 +76,6 @@ export default function ProjectList() {
     }
   }, [error]);
 
-  const resetDetailView = useCallback(() => {
-    setIsDetailLoading(false);
-  }, []);
-
   const getWorkspaceName = (workspaceId: number) => {
     if (workspace && workspace !== "0") return ""; // When the user selects a workspace in the filter.
     const projectWorkspace = workspaces.find((ws) => ws.id === workspaceId);
@@ -102,8 +97,6 @@ export default function ProjectList() {
           </List.Dropdown>
         )
       }
-      onSelectionChange={resetDetailView}
-      isShowingDetail={isDetailLoading}
     >
       {data && data.length > 0 ? (
         data.map((project: Project) => (
@@ -113,8 +106,6 @@ export default function ProjectList() {
               ...project,
               workspaceName: getWorkspaceName(project.workspace),
             }}
-            isDetailLoading={isDetailLoading}
-            setIsDetailLoading={setIsDetailLoading}
           />
         ))
       ) : (
