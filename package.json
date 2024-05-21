@@ -5,6 +5,9 @@
   "description": "The Label Studio Project Viewer is a Raycast extension designed to seamlessly integrate with Label Studio, enabling users to quickly access and manage their labeling projects directly from their desktop.",
   "icon": "label-studio-icon-512.png",
   "author": "luarmr",
+  "contributors" : [
+    "ricardoantoniocm"
+  ],
   "categories": [
     "Web"
   ],
