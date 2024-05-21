@@ -32,6 +32,7 @@ export default function ProjectActions({ project, isRestrictedUser, isEnterprise
       {!isRestrictedUser && (
         <Action.OpenInBrowser title="Settings" icon={"settings.svg"} url={`${urlProjectBase}/settings`} />
       )}
+      <Action.CopyToClipboard title="Copy Link" content={`${appURL}/projects/${project.id}/`} />
     </>
   );
 }
