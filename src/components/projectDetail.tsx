@@ -51,22 +51,33 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
       const fetchAvatars = async () => {
         const urls: Record<string, string> = {};
         const project = data.results[0];
+        const fetchPromises = [];
 
         if (project.created_by.avatar) {
-          urls[project.created_by.id] = await fetchAvatarUrl(project.created_by.avatar, apiToken);
+          fetchPromises.push(
+            fetchAvatarUrl(project.created_by.avatar, apiToken).then((url) => {
+              urls[project.created_by.id] = url;
+            }),
+          );
         }
 
         for (const member of project.members || []) {
           if (member.user.avatar) {
-            urls[member.user.id] = await fetchAvatarUrl(member.user.avatar, apiToken);
+            fetchPromises.push(
+              fetchAvatarUrl(member.user.avatar, apiToken).then((url) => {
+                urls[member.user.id] = url;
+              }),
+            );
           }
         }
 
+        await Promise.all(fetchPromises);
         setAvatarUrls(urls);
       };
+
       fetchAvatars();
     }
-  }, [data, apiToken]);
+  }, []);
 
   if (isLoading) {
     return <Detail isLoading={true} />;
@@ -128,7 +139,7 @@ ${project.description || "No description available."}
             <Detail.Metadata.TagList.Item
               text={project.pinned_at ? "Pinned" : "Not Pinned"}
               color={Color.PrimaryText}
-              icon={project.pinned_at ? "project-pinned.svg" : "project.svg"}
+              icon={{ source: project.pinned_at ? "project-pinned.svg" : "project.svg", tintColor: Color.PrimaryText }}
             />
           </Detail.Metadata.TagList>
           <Detail.Metadata.Separator />
