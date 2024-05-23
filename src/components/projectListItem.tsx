@@ -16,10 +16,12 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
     <ProjectActions project={project} isRestrictedUser={isRestrictedUser} isEnterprise={isEnterprise} />
   );
 
+  const color = project.color === "#FFFFFF" ? Color.SecondaryText : project.color;
+
   return (
     <List.Item
       key={project.id}
-      icon={{ source: project.pinned_at ? "project-pinned.svg" : "project.svg", tintColor: project.color }}
+      icon={{ source: project.pinned_at ? "project-pinned.svg" : "project.svg", tintColor: color }}
       title={project.title}
       subtitle={project.workspaceName}
       accessories={accessories}
