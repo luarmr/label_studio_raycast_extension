@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { ActionPanel, Color, Detail, Image, showToast, Toast } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
 import getAPIAccess from "../utils/apiAccess";
@@ -7,35 +7,39 @@ import { createInitialsIcon, createColorIcon, formatDate, fetchAvatarUrl } from 
 
 const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
   const { apiToken, appURL } = getAPIAccess();
-  const params = new URLSearchParams({
-    ids: String(projectId),
-    include: [
-      "id",
-      "title",
-      "description",
-      "color",
-      "is_published",
-      "is_draft",
-      "created_by",
-      "created_at",
-      "pinned_at",
-      "num_tasks_with_annotations",
-      "task_number",
-      "ground_truth_number",
-      "skipped_annotations_number",
-      "total_annotations_number",
-      "total_predictions_number",
-      "finished_task_number",
-      "workspace",
-      "members",
-      "ready",
-    ].join(","),
-  });
+
+  const params = useMemo(() => {
+    return new URLSearchParams({
+      ids: String(projectId),
+      include: [
+        "id",
+        "title",
+        "description",
+        "color",
+        "is_published",
+        "is_draft",
+        "created_by",
+        "created_at",
+        "pinned_at",
+        "num_tasks_with_annotations",
+        "task_number",
+        "ground_truth_number",
+        "skipped_annotations_number",
+        "total_annotations_number",
+        "total_predictions_number",
+        "finished_task_number",
+        "workspace",
+        "members",
+        "ready",
+      ].join(","),
+    });
+  }, [projectId]);
 
   const url = `${appURL}/api/projects?${params.toString()}`;
 
   const { data, isLoading, error } = useFetch<ProjectDetailApiResponse>(url, {
     headers: { Authorization: `Token ${apiToken}` },
+    keepPreviousData: true,
   });
 
   const [avatarUrls, setAvatarUrls] = useState<Record<string, string>>({});
@@ -77,33 +81,19 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
 
       fetchAvatars();
     }
-  }, []);
-
-  if (isLoading) {
-    return <Detail isLoading={true} />;
-  }
+  }, [data, apiToken]);
 
   const project = data?.results[0];
 
-  if (!project) {
-    return <Detail markdown="No project details available." />;
-  }
-  const members = project.members || [];
+  const markdown = useMemo(() => {
+    if (!project) return "No project details available.";
 
-  const createdByIcon = avatarUrls[project.created_by.id] || createInitialsIcon(project.created_by);
-
-  const createdByText =
-    project.created_by.first_name || project.created_by.last_name
-      ? `${project.created_by.first_name} ${project.created_by.last_name}`
-      : project.created_by.email;
-
-  const markdown = `
+    return `
 ## ${project.title}
 
 #
 ---
 #
-
 
 Tasks: ${project.task_number}, Skipped: ${project.skipped_annotations_number}, Finished: ${project.finished_task_number}
 
@@ -113,10 +103,24 @@ Ground Truth: ${project.ground_truth_number}, Predictions: ${project.total_predi
 ---
 #
 
-
 ${project.description || "No description available."}
+    `;
+  }, [project]);
 
-  `;
+  if (isLoading && !project) {
+    return <Detail isLoading={true} />;
+  }
+
+  if (!project) {
+    return <Detail markdown="No project details available." />;
+  }
+
+  const members = project.members || [];
+  const createdByIcon = avatarUrls[project.created_by.id] || createInitialsIcon(project.created_by);
+  const createdByText =
+    project.created_by.first_name || project.created_by.last_name
+      ? `${project.created_by.first_name} ${project.created_by.last_name}`
+      : project.created_by.email;
 
   return (
     <Detail
