@@ -18,12 +18,6 @@
       "title": "Projects",
       "description": "List all the projects and provide access to them.",
       "mode": "view"
-    },
-    {
-      "name": "openLabelStudio",
-      "title": "Open App",
-      "description": "Open LabelStudio in your browser.",
-      "mode": "no-view"
     }
   ],
   "dependencies": {
