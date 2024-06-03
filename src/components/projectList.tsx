@@ -12,12 +12,12 @@ export default function ProjectList() {
   const [workspace, setWorkspace] = useState<string>("");
   const [workspaces, setWorkspaces] = useState<Workspace[]>([{ id: 0, title: "All Projects" }]);
 
-  const fetchWorkspaces = async (): Promise<Workspace[]> => {
+  const fetchWorkspaces = async (): Promise<Workspace[] | null> => {
     const response = await fetch(`${appURL}/api/workspaces?page_size=-1`, {
       headers: { Authorization: `Token ${apiToken}` },
     });
     if (!response.ok) {
-      return [];
+      return null;
     }
     return response.json() as Promise<Workspace[]>;
   };
