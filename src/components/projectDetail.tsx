@@ -3,7 +3,7 @@ import { ActionPanel, Color, Detail, Image, showToast, Toast } from "@raycast/ap
 import { useFetch } from "@raycast/utils";
 import getAPIAccess from "../utils/apiAccess";
 import { ProjectDetailApiResponse, ProjectDetailProps } from "../types";
-import { createInitialsIcon, createColorIcon, formatDate, fetchAvatarUrl } from "../utils/avatar";
+import { createInitialsIcon, createColorIcon, ensureDomainInUrl, formatDate, fetchAvatarUrl } from "../utils/avatar";
 
 const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
   const { apiToken, appURL } = getAPIAccess();
@@ -35,7 +35,7 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
     });
   }, [projectId]);
 
-  const url = `${appURL}/api/projects?${params.toString()}`;
+  const url = `${appURL}/api/projects/?${params.toString()}`;
 
   const { data, isLoading, error } = useFetch<ProjectDetailApiResponse>(url, {
     headers: { Authorization: `Token ${apiToken}` },
@@ -58,18 +58,20 @@ const ProjectDetail = ({ projectId, projectActions }: ProjectDetailProps) => {
         const fetchPromises = [];
 
         if (project.created_by.avatar) {
+          const url = ensureDomainInUrl(project.created_by.avatar, appURL);
           fetchPromises.push(
-            fetchAvatarUrl(project.created_by.avatar, apiToken).then((url) => {
-              urls[project.created_by.id] = url;
+            fetchAvatarUrl(url, apiToken).then((img) => {
+              urls[project.created_by.id] = img;
             }),
           );
         }
 
         for (const member of project.members || []) {
           if (member.user.avatar) {
+            const url = ensureDomainInUrl(member.user.avatar, appURL);
             fetchPromises.push(
-              fetchAvatarUrl(member.user.avatar, apiToken).then((url) => {
-                urls[member.user.id] = url;
+              fetchAvatarUrl(url, apiToken).then((img) => {
+                urls[member.user.id] = img;
               }),
             );
           }

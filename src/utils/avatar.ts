@@ -93,4 +93,19 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
   return Buffer.from(binary, "binary").toString("base64");
 };
 
-export { createInitialsIcon, createColorIcon, formatDate, fetchAvatarUrl };
+const ensureDomainInUrl = (url: string, defaultDomain: string = "http://domain.com"): string => {
+  // If the URL doesn't start with 'http://' or 'https://', prepend the default domain
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    // Ensure proper slash handling between defaultDomain and url
+    if (url.startsWith("/")) {
+      return defaultDomain + url;
+    } else {
+      return `${defaultDomain}/${url}`;
+    }
+  }
+
+  // If the URL already has a protocol, return it as is
+  return url;
+};
+
+export { createInitialsIcon, createColorIcon, ensureDomainInUrl, formatDate, fetchAvatarUrl };
