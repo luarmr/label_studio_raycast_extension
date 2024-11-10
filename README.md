@@ -22,7 +22,7 @@ This Raycast extension allows you to navigate your Label Studio projects, provid
 To configure the extension:
 
 1. **Service URL:**
-   - Default: `https://app.heartex.com/`
+   - Default: `https://app.humansignal.com/`
    - You can also point to your own Label Studio instance, e.g., `http://localhost:8080/` or your cloud instance URL.
 
 2. **API Token:**

@@ -48,7 +48,7 @@
       "key": "instanceUrl",
       "title": "Url",
       "description": "Label Studio Instance URL",
-      "default": "https://app.heartex.com",
+      "default": "https://app.humansignal.com",
       "placeholder": "https://your-instance.labelstudio.io",
       "required": true
     },
